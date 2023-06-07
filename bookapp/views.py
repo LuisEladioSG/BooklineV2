@@ -60,3 +60,12 @@ def login_page(request):
 def logout_user(request):
     logout(request)
     return redirect('home')
+
+# Code for ChatGPT integration
+# @login_required(login_url='login')
+# def book_detail(request, slug):
+#     book = Book.objects.get(slug=slug)
+#     description = generate_book_description(book.title)
+#     book_category = book.category.first()
+#     similar_books = Book.objects.filter(category__name__startswith=book_category)    
+#     return render(request, 'book_detail.html', {'book': book, 'description': description, 'similar_books': similar_books})
