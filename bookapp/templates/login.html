@@ -15,25 +15,25 @@
     <form action = '#' method = 'POST'>
       {% csrf_token %}
       <div id = 'form-control'>
-        <label>Username:</label>
+        <label style='color: white;'>Username:</label>
         <input type="text" name="username" class="form-control" placeholder="Enter Username" maxlength="100" autofocus="" required="" id="id_username">
       </div>
   
      
   
       <div id = 'form-control'>
-        <label>Passowrd</label>
+        <label style='color: white;'>Passowrd</label>
         <input type="password" name="password1" class="form-control" placeholder="At least eight characters" maxlength="100" required="" id="id_password1">
       </div>
       {% for message in messages %}
       <p class  = 'successMsg'>{{message}}</p>
       {% endfor%}
       <div id = 'haveAnAccount'>
-        <p>Don't have an account?</p>
+        <p style='color: white;'>Don't have an account?</p>
         <a href = "{% url 'register' %}"><strong>Register</strong></a>
       </div>
       
-      <button type = 'submit' id = 'submitButton'>Login</button>
+      <button type = 'submit' id = 'submitButton' style='color: white;'>Login</button>
     </form>
     
   </div>

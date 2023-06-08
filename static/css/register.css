@@ -1,24 +1,24 @@
 *{
-    box-sizing: border-box;
+    box-sizing: border-box;    
 }
 
 #container{
     width: 350px;
     height: auto;
-    background-color: #333;
+    background-color: #007bff !important;
     border-radius: 10px;
     margin: auto;
-    border: 3px solid blue;
+    border: 3px solid #007bff;
     margin-top: 20px;
     margin-bottom: 20px;
-    padding-bottom: 10px;
+    padding-bottom: 10px;    
 }
 .header{
     width: 100%;
     height: 50px;
     display: flex;
     align-items: center;
-    background-color: #333smoke;
+    background-color: #007bff !important;
     border-radius: 10px;
     padding-left: 10px;
     margin-bottom: 10px;
@@ -33,7 +33,7 @@ form{
 #submitButton{
     width: 100%;
     height: 40px;
-    background-color: blue;
+    background-color: #007bff;
     margin-top: 20px;
     border: none;
     color: #333;
@@ -65,4 +65,8 @@ label{
     font-weight: bold;
     font-size: 18px;
     margin: auto;
+}
+
+.labelform {
+    color: white !important;
 }
