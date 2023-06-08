@@ -5,7 +5,7 @@
 #container{
     width: 350px;
     height: auto;
-    background-color: white;
+    background-color: #333;
     border-radius: 10px;
     margin: auto;
     border: 3px solid blue;
@@ -18,7 +18,7 @@
     height: 50px;
     display: flex;
     align-items: center;
-    background-color: whitesmoke;
+    background-color: #333smoke;
     border-radius: 10px;
     padding-left: 10px;
     margin-bottom: 10px;
@@ -36,7 +36,7 @@ form{
     background-color: blue;
     margin-top: 20px;
     border: none;
-    color: white;
+    color: #333;
     border-radius: 10px;
 } 
 label{
