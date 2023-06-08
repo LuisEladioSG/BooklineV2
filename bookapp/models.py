@@ -1,4 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import User
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    premium = models.BooleanField(default=False)
 
 class Category(models.Model):
     name = models.CharField('Categories', max_length=50)
@@ -17,6 +22,7 @@ class Book(models.Model):
     recommended_books = models.BooleanField(default=False)
     fiction_books = models.BooleanField(default=False)
     business_books = models.BooleanField(default=False)
+    premium = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

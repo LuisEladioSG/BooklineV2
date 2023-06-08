@@ -1,21 +1,46 @@
-from django.shortcuts import render, redirect
-from .models import Book, Category
+from django.shortcuts import render, redirect, reverse
+from .models import Book, Category, UserProfile
 from  .forms import CreateUserForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+
 
 def home(request):
-    recommended_books = Book.objects.filter(recommended_books = True)
-    fiction_books = Book.objects.filter(fiction_books = True)
-    business_books = Book.objects.filter(business_books = True)
-    return render(request, 'home.html', {'recommended_books': recommended_books,
-    'business_books': business_books, 'fiction_books': fiction_books
+    if request.user.is_authenticated:
+        if hasattr(request.user, 'userprofile') and request.user.userprofile.premium:
+            premium_books = Book.objects.filter(premium=True)
+        else:
+            premium_books = None
+    else:
+        premium_books = None
+
+    recommended_books = Book.objects.filter(recommended_books=True)
+    fiction_books = Book.objects.filter(fiction_books=True)
+    business_books = Book.objects.filter(business_books=True)
+
+    return render(request, 'home.html', {
+        'recommended_books': recommended_books,
+        'business_books': business_books,
+        'fiction_books': fiction_books,
+        'premium_books': premium_books
     })
 
+@login_required(login_url='login')
 def all_books(request):
-    books = Book.objects.all()
-    return render(request, 'all_books.html', {'books':books})
+    if request.user.userprofile.premium:
+        books = Book.objects.filter(premium=True)
+    else:
+        books = Book.objects.exclude(premium=True)
+    return render(request, 'all_books.html', {'books': books})
+
+
+@login_required(login_url='login')
+def premium_books(request):
+    books = Book.objects.filter(premium=True)
+    return render(request, 'all_books.html', {'books': books})
+
 
 def category_detail(request, slug):
     category = Category.objects.get(slug = slug)
@@ -23,24 +48,35 @@ def category_detail(request, slug):
 
 @login_required(login_url='login')
 def book_detail(request, slug):
-    book = Book.objects.get(slug = slug)
+    book = Book.objects.get(slug=slug)
     book_category = book.category.first()
-    similar_books = Book.objects.filter(category__name__startswith = book_category)    
+
+    if book.premium and not request.user.userprofile.premium:
+        return redirect(reverse('premium_error'))
+
+    similar_books = Book.objects.filter(category__name__startswith=book_category)    
     return render(request, 'book_detail.html', {'book': book, 'similar_books': similar_books})
 
+def premium_error(request):
+    return render(request, 'error.html')
+
+@login_required(login_url='login')
 def search_book(request):
-    searched_books = Book.objects.filter(title__icontains = request.POST.get('name_of_book'))    
-    return render(request, 'search_book.html', {'searched_books':searched_books})
+    if request.user.userprofile.premium:
+        searched_books = Book.objects.filter(title__icontains=request.POST.get('name_of_book'), premium=True)
+    else:
+        searched_books = Book.objects.filter(title__icontains=request.POST.get('name_of_book'))
+    return render(request, 'search_book.html', {'searched_books': searched_books})
 
 def register_page(request):
     register_form = CreateUserForm()
     if request.method == 'POST':
         register_form = CreateUserForm(request.POST)
         if register_form.is_valid():
-            register_form.save()
+            user = register_form.save()  # Guarda el usuario registrado
+            UserProfile.objects.create(user=user, premium=False)  # Crea el perfil de usuario
             messages.info(request, "Account Created Successfully!")
             return redirect('login')
-           
     return render(request, 'register.html', {'register_form': register_form})
 
 def login_page(request):
