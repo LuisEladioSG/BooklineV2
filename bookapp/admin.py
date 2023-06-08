@@ -1,11 +1,15 @@
 from django.contrib import admin
-from .models import Category, Book, BookSearch
-class CategoryAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('name',)}
+from django.contrib.auth.models import User
+from .models import Category, Book, BookSearch, UserProfile
 
-class BookAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('title',)}
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
 
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Book, BookAdmin)
+class UserAdmin(admin.ModelAdmin):
+    inlines = [UserProfileInline]
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
+admin.site.register(Category)
+admin.site.register(Book)
 admin.site.register(BookSearch)
