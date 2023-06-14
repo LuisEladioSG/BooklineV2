@@ -29,11 +29,8 @@ def home(request):
 
 @login_required(login_url='login')
 def all_books(request):
-    if request.user.userprofile.premium:
-        books = Book.objects.filter(premium=True)
-    else:
-        books = Book.objects.exclude(premium=True)
-    return render(request, 'all_books.html', {'books': books})
+    books = Book.objects.all()
+    return render(request, 'all_books.html', {'books':books})
 
 
 @login_required(login_url='login')
